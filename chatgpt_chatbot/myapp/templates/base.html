@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-clifford: #da373d;
+        }
+    </style>
+</head>
+<body class="bg-slate-800 flex justify-center items-center min-h-screen">
+
+    <div class="container w-10/12 max-w-2xl h-[80vh] flex justify-center items-center">
+        <div class="w-full h-full shadow-2xl bg-slate-700 rounded-xl flex flex-col">
+            <div class="flex-grow p-4 overflow-y-auto flex flex-col-reverse">
+                <div class="text-white space-y-2 flex flex-col-reverse">
+                    {% if chat_history %}
+                        {% for message in chat_history %}
+                            {% if message.role == 'ai' %}
+                                <div class="bg-slate-600 rounded-lg p-3">
+                                    <strong class="block mb-1">AI:</strong>
+                                    <p class="whitespace-pre-wrap">{{ message.content }}</p>
+                                </div>
+                            {% elif message.role == 'user' %}
+                                <div class="bg-blue-600 rounded-lg p-3 self-end">
+                                    <strong class="block mb-1">You:</strong>
+                                    <p class="whitespace-pre-wrap">{{ message.content }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if response %}
+                        <div class="bg-slate-600 rounded-lg p-3">
+                            <strong class="block mb-1">AI:</strong>
+                            <p class="whitespace-pre-wrap">{{ response }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <form method="post" class="p-4 border-t border-slate-600 flex">
+                {% csrf_token %}
+                <input class="flex-grow bg-slate-800 border border-green-500 text-green-400 placeholder-green-500 rounded-lg py-2 px-3 focus:ring-green-500 focus:border-green-500" placeholder="Write something..." name="user_message" type="text">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 py-2 px-4 ml-2 text-white rounded-lg">Send</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
